@@ -1,15 +1,27 @@
-import axios from "axios";
+export async function getTreatments() {
+  try {
+    const res = await fetch(
+      "https://content.healinghubhomoeopathicclinic.com/wp-json/wp/v2/treatment",
+      {
+        next: { revalidate: 60 },
+      },
+    );
+
+    if (!res.ok) throw new Error("API failed");
+
+    return await res.json();
+  } catch (e) {
+    console.error(e);
+
+    return null;
+  }
+}
 
 const page = async () => {
-  const data = await axios.get(
-    "https://content.healinghubhomoeopathicclinic.com/wp-json/wp/v2/treatment",
-  );
-
-  console.log(data?.data);
-
+  const treatments = await getTreatments();
   return (
     <div className="min-h-screen w-full bg-black text-white flex items-center justify-center flex-col gap-10">
-      {data?.data?.map((item) => (
+      {treatments?.map((item) => (
         <div key={item.id} className="p-4 border border-white rounded">
           <h2 className="text-xl font-bold mb-2">{item.title.rendered}</h2>
           <div
