@@ -1,26 +1,5 @@
-export const revalidate = 60;
-
-async function getTreatments() {
-  try {
-    const res = await fetch(
-      "https://content.healinghubhomoeopathicclinic.com/wp-json/wp/v2/treatment",
-      {
-        next: { revalidate: 60 },
-      },
-    );
-
-    if (!res.ok) {
-      throw new Error(`Failed: ${res.status}`);
-    }
-
-    const data = await res.json();
-
-    return Array.isArray(data) ? data : [];
-  } catch (error) {
-    console.error("Error fetching treatments:", error);
-    return [];
-  }
-}
+import Card from "@/components/Card";
+import { getTreatments } from "@/lib/getTreatments";
 
 export default async function Page() {
   const treatments = await getTreatments();
@@ -35,21 +14,7 @@ export default async function Page() {
         {treatments.length > 0 ? (
           <div className="grid gap-6">
             {treatments.map((item) => (
-              <article
-                key={item.id}
-                className="p-5 border border-white/20 rounded-xl"
-              >
-                <h2 className="text-xl font-semibold mb-3">
-                  {item?.title?.rendered || "Untitled Treatment"}
-                </h2>
-
-                <div
-                  className="text-sm leading-7"
-                  dangerouslySetInnerHTML={{
-                    __html: item?.content?.rendered || "",
-                  }}
-                />
-              </article>
+              <Card key={item.id} data={item} />
             ))}
           </div>
         ) : (
