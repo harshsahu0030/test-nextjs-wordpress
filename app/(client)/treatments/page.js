@@ -5,7 +5,7 @@ export default async function Page() {
   const treatments = await getTreatments();
 
   return (
-    <main className="min-h-screen w-full bg-black text-white px-6 py-12">
+    <main className="h-full w-full">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-center text-4xl md:text-5xl font-bold mb-10">
           Treatments
