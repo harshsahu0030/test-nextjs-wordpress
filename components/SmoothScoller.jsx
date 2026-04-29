@@ -6,7 +6,6 @@ import { ScrollSmoother } from "gsap/dist/ScrollSmoother";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
-// Register plugins only on the client side
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 }
@@ -20,10 +19,13 @@ export default function SmoothScroller({ children }) {
         wrapper: "#smooth-wrapper",
         content: "#smooth-content",
         smooth: 2,
-        effects: true,
       });
-    },
 
+      // Force a recalculation once the DOM is fully settled
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
+    },
     {
       dependencies: [pathname],
       revertOnUpdate: true,
@@ -32,9 +34,7 @@ export default function SmoothScroller({ children }) {
 
   return (
     <div id="smooth-wrapper">
-      <div id="smooth-content" className="">
-        {children}
-      </div>
+      <div id="smooth-content">{children}</div>
     </div>
   );
 }
